@@ -1,0 +1,61 @@
+{
+	"name": "send4/send4-for-woocommerce",
+	"description": "Send4 for WooCommerce — texts each buyer when their order is ready and books the delivery or installation slot.",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
+	"require": {
+		"php": ">=7.4"
+	},
+	"require-dev": {
+		"composer/installers": "^2.3",
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"php-stubs/woocommerce-stubs": "^11.2",
+		"phpcompatibility/phpcompatibility-wp": "^2.1.8",
+		"phpstan/extension-installer": "^1.4",
+		"phpstan/phpstan": "^2.0",
+		"phpunit/phpunit": "^9.6",
+		"roots/wordpress": "^7.1",
+		"squizlabs/php_codesniffer": "^3.13.5",
+		"szepeviktor/phpstan-wordpress": "^2.0",
+		"wp-coding-standards/wpcs": "^3.4",
+		"wp-phpunit/wp-phpunit": "^7.1",
+		"wpackagist-plugin/woocommerce": "^11.2",
+		"yoast/phpunit-polyfills": "^1.1.5",
+		"yoast/wp-test-utils": "^1.2.1"
+	},
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "https://wpackagist.org",
+			"only": [
+				"wpackagist-plugin/*",
+				"wpackagist-theme/*"
+			]
+		}
+	],
+	"config": {
+		"platform": {
+			"php": "7.4.33"
+		},
+		"sort-packages": true,
+		"allow-plugins": {
+			"composer/installers": true,
+			"roots/wordpress-core-installer": true,
+			"dealerdirect/phpcodesniffer-composer-installer": true,
+			"phpstan/extension-installer": true
+		}
+	},
+	"extra": {
+		"wordpress-install-dir": "tests/wordpress",
+		"installer-paths": {
+			"tests/plugins/{$name}/": [
+				"type:wordpress-plugin"
+			]
+		}
+	},
+	"scripts": {
+		"test": "phpunit",
+		"lint": "phpcs",
+		"analyse": "phpstan analyse"
+	}
+}

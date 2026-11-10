@@ -1,0 +1,33 @@
+parameters:
+	ignoreErrors:
+		# WordPress's own false positives, inherited with the core from send4-wordpress:
+		# PHPStan folds ABSPATH and reads WP_Site::$blog_id as never null.
+		-
+			message: '#^Path in require_once\(\) "1wp\-admin/includes/plugin\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: includes/class-send4wc-installer.php
+
+		-
+			message: '#^Path in require_once\(\) "wp\-admin/includes/plugin\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: includes/class-send4wc-installer.php
+
+		-
+			message: '#^Property WP_Site\:\:\$blog_id \(string\) in isset\(\) is not nullable\.$#'
+			identifier: isset.property
+			count: 1
+			path: includes/class-send4wc-installer.php
+
+		-
+			message: '#^Path in require_once\(\) "1wp\-admin/includes/upgrade\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: includes/class-send4wc-queue.php
+
+		-
+			message: '#^Path in require_once\(\) "wp\-admin/includes/upgrade\.php" is not a file or it does not exist\.$#'
+			identifier: requireOnce.fileNotFound
+			count: 1
+			path: includes/class-send4wc-queue.php

@@ -1,0 +1,29 @@
+# The PHPUnit runner for docker-compose's `tests` service.
+#
+# The suite needs a real MySQL-family database and a mysqli-capable PHP, and the
+# host is not guaranteed to have either. Composer is here so the image can also
+# install dependencies when the bind-mounted vendor/ is missing; git and unzip
+# are what Composer needs to do that.
+#
+# PHP_VERSION is a build arg so the CI matrix's other leg can be reproduced
+# locally rather than only ever running on a GitHub runner:
+#
+#   make test-php74
+ARG PHP_VERSION=8.3
+FROM php:${PHP_VERSION}-cli
+
+RUN apt-get update \
+	&& apt-get install -y --no-install-recommends git unzip \
+	&& rm -rf /var/lib/apt/lists/*
+
+RUN docker-php-ext-install mysqli
+
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
+
+# Composer writes here; the compose file mounts a named volume over it so the
+# cache survives between runs.
+ENV COMPOSER_HOME=/tmp/composer
+
+WORKDIR /app
+
+CMD ["vendor/bin/phpunit"]

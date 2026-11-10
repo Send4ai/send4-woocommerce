@@ -1,0 +1,524 @@
+# Copyright (C) 2026 Send4
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Send4 for WooCommerce 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/send4-for-woocommerce\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-11-10T19:59:23+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: send4-for-woocommerce\n"
+
+#. Plugin Name of the plugin
+#: send4-for-woocommerce.php
+#: admin/views/dashboard.php:52
+msgid "Send4 for WooCommerce"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: send4-for-woocommerce.php
+msgid "https://send4.ai"
+msgstr ""
+
+#. Description of the plugin
+#: send4-for-woocommerce.php
+msgid "Texts each buyer when their order reaches a status you choose, such as \"ready for delivery\", and books the delivery or installation slot over SMS with Send4's AI."
+msgstr ""
+
+#. Author of the plugin
+#: send4-for-woocommerce.php
+#: admin/views/partials/app-bar.php:20
+#: includes/class-send4wc-admin.php:86
+#: includes/class-send4wc-admin.php:87
+#: includes/class-send4wc-privacy.php:47
+msgid "Send4"
+msgstr ""
+
+#: admin/views/dashboard.php:22
+msgid "WooCommerce"
+msgstr ""
+
+#. translators: %s: the configured URL.
+#: admin/views/dashboard.php:42
+#, php-format
+msgid "Send4 is configured to send to %s, which is not a Send4 address. Nothing will be sent until that is corrected."
+msgstr ""
+
+#: admin/views/dashboard.php:53
+msgid "Texts each buyer when their order reaches a status you choose, and books the delivery or installation slot over SMS."
+msgstr ""
+
+#: admin/views/dashboard.php:67
+msgid "Step 1, done"
+msgstr ""
+
+#: admin/views/dashboard.php:75
+msgid "Connect your Send4 account"
+msgstr ""
+
+#. translators: %s: Send4 account name.
+#: admin/views/dashboard.php:82
+#: includes/class-send4wc-admin.php:499
+#, php-format
+msgid "Connected to %s."
+msgstr ""
+
+#. translators: %s: date and time the store was connected, in the site's own format.
+#: admin/views/dashboard.php:92
+#, php-format
+msgid "Since %s"
+msgstr ""
+
+#: admin/views/dashboard.php:110
+msgid "Test connection"
+msgstr ""
+
+#: admin/views/dashboard.php:115
+msgid "Disconnect"
+msgstr ""
+
+#: admin/views/dashboard.php:122
+msgid "If this store's key was revoked or replaced in Send4, connect again. The current credentials are kept until new ones are proven to work."
+msgstr ""
+
+#: admin/views/dashboard.php:124
+msgid "You will approve this on Send4 and come straight back. Nothing to copy, and it works for a store on your own machine or behind a password too. If you use the Send4 forms plugin as well, it keeps its own connection."
+msgstr ""
+
+#: admin/views/dashboard.php:129
+msgid "Connect with Send4"
+msgstr ""
+
+#: admin/views/dashboard.php:142
+msgid "Choose the order statuses in Send4"
+msgstr ""
+
+#: admin/views/dashboard.php:143
+msgid "A Send4 flow with a \"WooCommerce order\" trigger names the statuses that start it, such as Processing or your own \"Ready for delivery\". Only those leave this store, plus Cancelled and Refunded, so a flow stops texting about an order that is off."
+msgstr ""
+
+#: admin/views/dashboard.php:147
+msgid "Available once your account is connected"
+msgstr ""
+
+#: admin/views/dashboard.php:152
+msgid "Your checkout lets buyers leave the phone number empty, and an order without one can never be texted. Make the phone field required in the checkout settings."
+msgstr ""
+
+#: admin/views/dashboard.php:158
+msgid "No Send4 flow starts on an order status yet, so no order is sent. Create a flow with a \"WooCommerce order\" trigger in Send4, then sync."
+msgstr ""
+
+#: admin/views/dashboard.php:165
+msgid "Order status"
+msgstr ""
+
+#: admin/views/dashboard.php:166
+msgid "Sent to Send4"
+msgstr ""
+
+#: admin/views/dashboard.php:173
+msgid "Starts a flow, with the order details"
+msgstr ""
+
+#: admin/views/dashboard.php:179
+msgid "Ends the order's conversation, number only"
+msgstr ""
+
+#: admin/views/dashboard.php:191
+msgid "Sync now"
+msgstr ""
+
+#. translators: %s: date and time of the last sync.
+#: admin/views/dashboard.php:199
+#, php-format
+msgid "Send4 last received this store's statuses and categories on %s. The store asks again every hour, and whenever this screen is opened."
+msgstr ""
+
+#: admin/views/dashboard.php:203
+msgid "The store tells Send4 its statuses and categories every hour, and whenever this screen is opened."
+msgstr ""
+
+#: admin/views/dashboard.php:218
+msgid "Order events"
+msgstr ""
+
+#: admin/views/dashboard.php:223
+msgid "The plugin's queue table is missing, so order events cannot be kept for a retry. Deactivate and activate the plugin to create it."
+msgstr ""
+
+#: admin/views/dashboard.php:229
+msgid "Waiting to send"
+msgstr ""
+
+#: admin/views/dashboard.php:233
+#: admin/views/dashboard.php:288
+#: includes/class-send4wc-admin.php:839
+msgid "Failed"
+msgstr ""
+
+#: admin/views/dashboard.php:237
+msgid "Last answer"
+msgstr ""
+
+#: admin/views/dashboard.php:257
+msgid "Send waiting events now"
+msgstr ""
+
+#: admin/views/dashboard.php:264
+msgid "Resend failed events"
+msgstr ""
+
+#: admin/views/dashboard.php:275
+msgid "Order"
+msgstr ""
+
+#: admin/views/dashboard.php:276
+msgid "Status"
+msgstr ""
+
+#: admin/views/dashboard.php:277
+msgid "Queue"
+msgstr ""
+
+#: admin/views/dashboard.php:278
+msgid "Attempts"
+msgstr ""
+
+#: admin/views/dashboard.php:288
+msgid "Waiting"
+msgstr ""
+
+#: admin/views/dashboard.php:305
+msgid "Activity"
+msgstr ""
+
+#: admin/views/dashboard.php:310
+msgid "Clear"
+msgstr ""
+
+#: admin/views/dashboard.php:315
+msgid "Nothing yet. Each order event the store queues or sends is listed here, without the buyer's details."
+msgstr ""
+
+#: admin/views/dashboard.php:338
+msgid "Sending to"
+msgstr ""
+
+#: admin/views/dashboard.php:340
+msgid "order details and credentials only ever go to Send4."
+msgstr ""
+
+#: admin/views/dashboard.php:346
+msgid "What it does"
+msgstr ""
+
+#: admin/views/dashboard.php:348
+msgid "Texts the buyer the moment an order reaches the status you choose"
+msgstr ""
+
+#: admin/views/dashboard.php:349
+msgid "Books the delivery or installation slot in the conversation"
+msgstr ""
+
+#: admin/views/dashboard.php:350
+msgid "Stops texting when an order is cancelled or refunded"
+msgstr ""
+
+#: admin/views/dashboard.php:351
+msgid "Never slows the checkout, and loses nothing when Send4 is briefly unreachable"
+msgstr ""
+
+#: admin/views/dashboard.php:361
+msgid "New to Send4?"
+msgstr ""
+
+#: admin/views/dashboard.php:363
+msgid "See how it works →"
+msgstr ""
+
+#: admin/views/partials/app-bar.php:31
+msgid "Connected"
+msgstr ""
+
+#. translators: %s: Send4 account name.
+#: admin/views/partials/app-bar.php:35
+#, php-format
+msgid "Connected · %s"
+msgstr ""
+
+#: admin/views/partials/app-bar.php:44
+msgid "Send4 unreachable"
+msgstr ""
+
+#: admin/views/partials/app-bar.php:49
+msgid "Connection refused"
+msgstr ""
+
+#: admin/views/partials/app-bar.php:54
+msgid "Connection not checked"
+msgstr ""
+
+#: admin/views/partials/app-bar.php:59
+msgid "Not connected"
+msgstr ""
+
+#: admin/views/partials/app-bar.php:64
+msgid "Open web app"
+msgstr ""
+
+#: includes/class-send4wc-admin.php:148
+msgid "Settings"
+msgstr ""
+
+#: includes/class-send4wc-admin.php:235
+#: includes/class-send4wc-admin.php:742
+msgid "You do not have permission to configure Send4."
+msgstr ""
+
+#: includes/class-send4wc-admin.php:391
+msgid "Send4 could not be reached just now. Order events are being queued and will be sent automatically once it answers again."
+msgstr ""
+
+#: includes/class-send4wc-admin.php:395
+msgid "Send4 refused this store's connection. Order events are not being delivered until it is fixed: test the connection again, or reconnect."
+msgstr ""
+
+#. translators: %s: why Send4 refused, e.g. "Send4 rejected these credentials."
+#: includes/class-send4wc-admin.php:488
+#, php-format
+msgid "%s The new credentials were not saved; this site is still using the ones it had."
+msgstr ""
+
+#. translators: %s: why Send4 refused, e.g. "Send4 rejected these credentials."
+#: includes/class-send4wc-admin.php:490
+#, php-format
+msgid "%s The credentials were not saved."
+msgstr ""
+
+#: includes/class-send4wc-admin.php:555
+msgid "That connection did not start here. Try connecting again."
+msgstr ""
+
+#. translators: 1: Send4 account name, 2: number of order statuses.
+#: includes/class-send4wc-admin.php:600
+#, php-format
+msgid "Connected to %1$s. A flow starts on %2$d order status."
+msgid_plural "Connected to %1$s. Flows start on %2$d order statuses."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-send4wc-admin.php:626
+msgid "Disconnected from Send4. No order is sent until this store connects again."
+msgstr ""
+
+#: includes/class-send4wc-admin.php:640
+msgid "Connect this store to Send4 before syncing it."
+msgstr ""
+
+#: includes/class-send4wc-admin.php:653
+msgid "Synced. Send4 has this store's order statuses and categories, and the store knows which statuses to send."
+msgstr ""
+
+#. translators: 1: attempted count, 2: delivered count.
+#: includes/class-send4wc-admin.php:672
+#, php-format
+msgid "Sent %1$s queued order event; %2$s delivered."
+msgid_plural "Sent %1$s queued order events; %2$s delivered."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-send4wc-admin.php:695
+msgid "Activity log cleared."
+msgstr ""
+
+#: includes/class-send4wc-admin.php:711
+msgid "Connect this store to Send4 before resending failed order events."
+msgstr ""
+
+#: includes/class-send4wc-admin.php:717
+msgid "There were no failed order events for this Send4 account to resend."
+msgstr ""
+
+#. translators: %d: number of order events.
+#: includes/class-send4wc-admin.php:724
+#, php-format
+msgid "%d failed order event will be resent within a minute."
+msgid_plural "%d failed order events will be resent within a minute."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-send4wc-admin.php:831
+msgid "Delivered"
+msgstr ""
+
+#: includes/class-send4wc-admin.php:833
+msgid "Already received"
+msgstr ""
+
+#: includes/class-send4wc-admin.php:835
+msgid "Delivered, no flow started"
+msgstr ""
+
+#: includes/class-send4wc-admin.php:837
+msgid "Queued for retry"
+msgstr ""
+
+#: includes/class-send4wc-admin.php:841
+msgid "No order events yet"
+msgstr ""
+
+#: includes/class-send4wc-api-client.php:218
+msgid "Send4 is not connected: connect your account under Send4 → Connection."
+msgstr ""
+
+#: includes/class-send4wc-api-client.php:346
+msgid "Send4 asked this site to wait before signing in again."
+msgstr ""
+
+#: includes/class-send4wc-api-client.php:363
+msgid "Send4 is rate limiting sign-in attempts (10 per minute). Wait a minute and try again."
+msgstr ""
+
+#: includes/class-send4wc-api-client.php:371
+msgid "Send4 rejected these credentials. Check the client ID and secret, and that the API client is active."
+msgstr ""
+
+#. translators: %d: HTTP status code.
+#: includes/class-send4wc-api-client.php:375
+#, php-format
+msgid "Send4 returned an unexpected status (%d) while signing in."
+msgstr ""
+
+#. translators: %s: the URL the API answered with.
+#: includes/class-send4wc-api-client.php:427
+#, php-format
+msgid "Send4 answered with an approval link that is not on Send4 (%s), so the connection was not started."
+msgstr ""
+
+#: includes/class-send4wc-api-client.php:492
+msgid "Send4 is rate limiting connection attempts. Wait a minute and try again."
+msgstr ""
+
+#. translators: %d: HTTP status code.
+#: includes/class-send4wc-api-client.php:496
+#, php-format
+msgid "Send4 returned an unexpected status (%d) while connecting."
+msgstr ""
+
+#: includes/class-send4wc-api-client.php:546
+#: includes/class-send4wc-api-client.php:684
+msgid "This API client is missing the \"WordPress plugin\" permission. Edit the key in your Send4 dashboard and tick that ability."
+msgstr ""
+
+#. translators: %d: HTTP status code.
+#: includes/class-send4wc-api-client.php:554
+#, php-format
+msgid "Send4 returned an unexpected status (%d) for the connection test."
+msgstr ""
+
+#: includes/class-send4wc-api-client.php:698
+msgid "This API key was not created by connecting this site, so Send4 has nowhere to record the store. Reconnect from the Connection screen."
+msgstr ""
+
+#. translators: %d: HTTP status code.
+#: includes/class-send4wc-api-client.php:705
+#, php-format
+msgid "Send4 returned an unexpected status (%d) while reporting this store."
+msgstr ""
+
+#: includes/class-send4wc-api-client.php:736
+msgid "Send4 had already received this order event."
+msgstr ""
+
+#: includes/class-send4wc-api-client.php:744
+msgid "Send4 answered with something that was not an order event response."
+msgstr ""
+
+#: includes/class-send4wc-api-client.php:757
+msgid "Delivered. The buyer has opted out of texts, so no flow was started."
+msgstr ""
+
+#: includes/class-send4wc-api-client.php:758
+msgid "Delivered. No flow starts on this status; it only ended any runs it should."
+msgstr ""
+
+#: includes/class-send4wc-api-client.php:771
+msgid "Send4 was busy with this order's conversation and asked for a retry."
+msgstr ""
+
+#: includes/class-send4wc-api-client.php:789
+msgid "This API key was not created by connecting this site. Reconnect from the Connection screen."
+msgstr ""
+
+#: includes/class-send4wc-api-client.php:815
+msgid "This API client is missing the \"WordPress plugin\" permission."
+msgstr ""
+
+#: includes/class-send4wc-api-client.php:823
+msgid "Send4 rejected the access token."
+msgstr ""
+
+#: includes/class-send4wc-api-client.php:831
+msgid "Send4 answered with a redirect, which usually means the URL is wrong."
+msgstr ""
+
+#: includes/class-send4wc-api-client.php:839
+msgid "Send4 is rate limiting order events. The event will be retried."
+msgstr ""
+
+#. translators: %d: HTTP status code.
+#: includes/class-send4wc-api-client.php:854
+#, php-format
+msgid "Send4 refused the order event (status %d)."
+msgstr ""
+
+#. translators: %d: HTTP status code.
+#: includes/class-send4wc-api-client.php:864
+#, php-format
+msgid "Send4 returned status %d."
+msgstr ""
+
+#: includes/class-send4wc-api-client.php:876
+msgid "Send4 rejected the order event as malformed."
+msgstr ""
+
+#. translators: %s: configured URL.
+#: includes/class-send4wc-api-client.php:983
+#, php-format
+msgid "Refusing to send: %s is not a Send4 address."
+msgstr ""
+
+#: includes/class-send4wc-cron.php:47
+msgid "Every minute (Send4)"
+msgstr ""
+
+#: includes/class-send4wc-delivery.php:62
+msgid "An order event could not be queued: the queue table is missing or not writable."
+msgstr ""
+
+#: includes/class-send4wc-delivery.php:132
+msgid "Queued while this site was connected to a different Send4 account, so it was not sent to this one."
+msgstr ""
+
+#: includes/class-send4wc-order-payload.php:95
+msgid "The queued order event could not be read."
+msgstr ""
+
+#: includes/class-send4wc-order-payload.php:121
+msgid "The order was deleted before its event could be sent."
+msgstr ""
+
+#: includes/class-send4wc-privacy.php:45
+msgid "When your order reaches a status this store has connected to Send4 — for example \"ready for delivery\" — your name, phone number, email address, delivery address, the order number, the items you ordered and your order note are sent to Send4 (send4.ai) so that we can text you about your delivery or installation. When an order is cancelled or refunded, only its number and status are sent, so that we stop texting you about it. If Send4 cannot be reached at that moment, the order is retried for up to about a day and a half; while it waits, this store keeps only the order number and status, never your details."
+msgstr ""
+
+#: includes/class-send4wc-store-sync.php:114
+msgid "Connect this store to Send4 first."
+msgstr ""

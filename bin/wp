@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Run WP-CLI against the development stack: bin/wp plugin list
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+if ! docker compose ps --status running --services 2>/dev/null | grep -qx wordpress; then
+	echo "The wordpress container is not running. Start it with: make up" >&2
+	exit 1
+fi
+
+# The official image copies WordPress into the volume on first boot; WP-CLI has
+# nothing to talk to until that finishes.
+for _ in $(seq 1 60); do
+	if docker compose exec -T wordpress test -f /var/www/html/wp-settings.php 2>/dev/null; then
+		break
+	fi
+	sleep 1
+done
+
+exec docker compose run --rm cli "$@"

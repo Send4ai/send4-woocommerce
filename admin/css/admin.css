@@ -1,0 +1,1273 @@
+/*
+ * The Send4 screens.
+ *
+ * The Send4 brand, hand-implemented as custom properties rather than pulled in
+ * from the app's stylesheet: that one is Tailwind JIT output, content-hashed on
+ * every deploy and full of global resets that would land on wp-admin. Nothing
+ * here loads from a remote host, which wordpress.org requires anyway.
+ *
+ * Everything is prefixed .send4wc- and scoped under .send4wc-app or .send4wc-screen,
+ * so no other plugin's page can pick any of it up.
+ */
+
+:root {
+	--s4-emerald-50: #ecfdf5;
+	--s4-emerald-100: #d1fae5;
+	--s4-emerald-200: #a7f3d0;
+	--s4-emerald-600: #059669;
+	--s4-emerald-700: #047857;
+
+	--s4-slate-50: #f8fafc;
+	--s4-slate-100: #f1f5f9;
+	--s4-slate-200: #e2e8f0;
+	--s4-slate-300: #cbd5e1;
+	--s4-slate-400: #94a3b8;
+	--s4-slate-500: #64748b;
+	--s4-slate-600: #475569;
+	--s4-slate-700: #334155;
+	--s4-slate-900: #0f172a;
+
+	--s4-amber-50: #fffbeb;
+	--s4-amber-200: #fde68a;
+	--s4-amber-500: #f59e0b;
+	--s4-amber-800: #92400e;
+
+	--s4-blue-50: #eff6ff;
+	--s4-blue-200: #bfdbfe;
+	--s4-blue-700: #1d4ed8;
+
+	--s4-red-50: #fef2f2;
+	--s4-red-200: #fecaca;
+	--s4-red-600: #dc2626;
+	--s4-red-700: #b91c1c;
+
+	--s4-radius-md: 6px;
+	--s4-radius-lg: 8px;
+	--s4-radius-xl: 12px;
+
+	--s4-shadow-sm: 0 1px 2px rgba(15, 23, 42, .05);
+	--s4-shadow-md: 0 1px 3px rgba(15, 23, 42, .1), 0 1px 2px rgba(15, 23, 42, .06);
+}
+
+/* wp-admin paints the content area white; the design is cards on slate. */
+body.send4wc-screen #wpcontent,
+body.send4wc-screen #wpbody-content {
+	background: var(--s4-slate-50);
+	padding-left: 0;
+}
+
+body.send4wc-screen #wpbody-content {
+	padding-bottom: 40px;
+}
+
+/* Core prints .wrap-less notices at the top of the page; keep them out of the
+   app's own layout rather than letting them push the app bar around. */
+body.send4wc-screen .update-nag,
+body.send4wc-screen .notice:not(.send4wc-notice) {
+	margin-left: 20px;
+	margin-right: 20px;
+}
+
+.send4wc-app {
+	font-size: 14px;
+	line-height: 1.5;
+	color: var(--s4-slate-900);
+	-webkit-font-smoothing: antialiased;
+}
+
+.send4wc-app *,
+.send4wc-app *::before,
+.send4wc-app *::after {
+	box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------------- app bar */
+
+.send4wc-appbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	flex-wrap: wrap;
+	padding: 12px 24px;
+	background: #fff;
+	border-bottom: 1px solid var(--s4-slate-200);
+}
+
+.send4wc-appbar__brand {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	min-width: 0;
+}
+
+.send4wc-mark {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	border-radius: var(--s4-radius-lg);
+	background: var(--s4-slate-900);
+	color: #fff;
+	flex-shrink: 0;
+}
+
+.send4wc-appbar__name {
+	font-weight: 700;
+}
+
+.send4wc-appbar__sep {
+	color: var(--s4-slate-300);
+}
+
+.send4wc-appbar__leaf {
+	font-weight: 500;
+	color: var(--s4-slate-500);
+}
+
+.send4wc-appbar__actions {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+/* ------------------------------------------------------------------- body */
+
+.send4wc-body {
+	max-width: 1280px;
+	padding: 24px;
+}
+
+.send4wc-pagehead {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 16px;
+	flex-wrap: wrap;
+	margin-bottom: 20px;
+}
+
+/* The right-hand side of a page head: an action and the note under it. */
+.send4wc-pagehead__actions {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 4px;
+}
+
+.send4wc-pagehead__actions p {
+	margin: 0;
+}
+
+.send4wc-app h1 {
+	margin: 0;
+	padding: 0;
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 1.25;
+	color: var(--s4-slate-900);
+}
+
+.send4wc-app h2 {
+	margin: 0;
+	font-size: 16px;
+	font-weight: 600;
+}
+
+/* Section headings inside a card are h2 for the outline (a screen has one h1
+   and nothing under it skips a level) but keep the smaller h3 look. The
+   extra class outranks `.send4wc-app h2`, as `.send4wc-app h3` did before. */
+.send4wc-app h3,
+.send4wc-app .send4wc-step__body h2,
+.send4wc-app h2.send4wc-eyebrow,
+.send4wc-app h2.send4wc-card__title--sub {
+	margin: 0;
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.send4wc-sub {
+	margin: 4px 0 0;
+	font-size: 13px;
+	color: var(--s4-slate-500);
+}
+
+.send4wc-muted {
+	color: var(--s4-slate-500);
+}
+
+.send4wc-xs {
+	font-size: 12px;
+	line-height: 1.45;
+}
+
+.send4wc-strong {
+	font-weight: 600;
+	color: var(--s4-slate-900);
+}
+
+.send4wc-warning {
+	color: var(--s4-red-600);
+}
+
+.send4wc-truncate {
+	display: block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.send4wc-backlink {
+	margin: 0 0 12px;
+	font-size: 13px;
+}
+
+.send4wc-footnote {
+	margin: 12px 0 0;
+}
+
+.send4wc-app code {
+	padding: 2px 5px;
+	border-radius: 4px;
+	background: var(--s4-slate-100);
+	color: var(--s4-slate-700);
+	font-size: 12px;
+}
+
+.send4wc-code-block {
+	display: block;
+	padding: 8px 10px;
+	word-break: break-all;
+}
+
+.send4wc-link,
+.send4wc-app a {
+	color: var(--s4-emerald-700);
+}
+
+/* ------------------------------------------------------------------ grids */
+
+.send4wc-grid {
+	display: grid;
+	gap: 16px;
+	margin-bottom: 16px;
+}
+
+.send4wc-grid--gap-lg {
+	gap: 24px;
+}
+
+.send4wc-grid--2 {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.send4wc-grid--3 {
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.send4wc-grid--4 {
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.send4wc-col-2 {
+	grid-column: span 2 / span 2;
+	min-width: 0;
+}
+
+.send4wc-col-1 {
+	min-width: 0;
+}
+
+.send4wc-stack {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+@media screen and (max-width: 1100px) {
+	.send4wc-grid--4 {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.send4wc-grid--3 {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.send4wc-col-2 {
+		grid-column: auto;
+	}
+}
+
+@media screen and (max-width: 782px) {
+	.send4wc-body {
+		padding: 16px;
+	}
+
+	.send4wc-grid--2,
+	.send4wc-grid--4 {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+/* ------------------------------------------------------------------ cards */
+
+.send4wc-card {
+	background: #fff;
+	border: 1px solid var(--s4-slate-200);
+	border-radius: var(--s4-radius-xl);
+	box-shadow: var(--s4-shadow-sm);
+}
+
+.send4wc-card--pad {
+	padding: 24px;
+}
+
+.send4wc-card--flush {
+	padding: 0;
+	overflow: hidden;
+}
+
+.send4wc-card__head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 16px 20px;
+	border-bottom: 1px solid var(--s4-slate-200);
+}
+
+.send4wc-card__head--stacked {
+	display: block;
+}
+
+.send4wc-card__head p {
+	margin: 2px 0 0;
+}
+
+.send4wc-card__title {
+	margin: 0 0 16px;
+}
+
+.send4wc-card__note {
+	margin-top: 12px;
+}
+
+.send4wc-card__foot {
+	padding: 12px 20px;
+	border-top: 1px solid var(--s4-slate-200);
+}
+
+.send4wc-empty {
+	padding: 28px 20px;
+	text-align: center;
+}
+
+.send4wc-empty p {
+	margin: 0 0 4px;
+}
+
+/* ------------------------------------------------------------------ stats */
+
+.send4wc-stat {
+	padding: 20px;
+}
+
+.send4wc-stat__label {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin: 0 0 8px;
+	font-size: 11px;
+	font-weight: 500;
+	letter-spacing: .04em;
+	text-transform: uppercase;
+	color: var(--s4-slate-500);
+}
+
+.send4wc-stat__label svg {
+	color: var(--s4-slate-400);
+	flex-shrink: 0;
+}
+
+.send4wc-stat__value {
+	display: flex;
+	align-items: baseline;
+	gap: 8px;
+	margin: 0;
+	font-size: 30px;
+	font-weight: 700;
+	line-height: 1.1;
+	font-variant-numeric: tabular-nums;
+}
+
+.send4wc-stat__value--sm {
+	align-items: center;
+	font-size: 20px;
+}
+
+.send4wc-stat__note {
+	margin: 6px 0 0;
+	font-size: 12px;
+	color: var(--s4-slate-400);
+}
+
+.send4wc-delta {
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.send4wc-delta--up {
+	color: var(--s4-emerald-600);
+}
+
+.send4wc-delta--down {
+	color: var(--s4-red-600);
+}
+
+.send4wc-delta--flat {
+	color: var(--s4-slate-500);
+}
+
+.send4wc-triple {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 8px;
+	text-align: center;
+}
+
+.send4wc-triple p {
+	margin: 0;
+}
+
+.send4wc-triple__value {
+	font-size: 18px;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+}
+
+.send4wc-triple__value--ok {
+	color: var(--s4-emerald-600);
+}
+
+/* ------------------------------------------------------------------ lists */
+
+.send4wc-list__row {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 14px 20px;
+	border-top: 1px solid var(--s4-slate-100);
+}
+
+.send4wc-list__row:first-child {
+	border-top: 0;
+}
+
+.send4wc-list__main {
+	flex: 1;
+	min-width: 0;
+}
+
+.send4wc-list__main p {
+	margin: 0;
+}
+
+.send4wc-list__title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	min-width: 0;
+}
+
+.send4wc-list__title .send4wc-strong {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.send4wc-list__sub {
+	margin: 2px 0 0;
+	font-size: 13px;
+	color: var(--s4-slate-500);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.send4wc-list__meta {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 4px;
+	flex-shrink: 0;
+	text-align: right;
+}
+
+.send4wc-avatar {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	flex-shrink: 0;
+	border-radius: 999px;
+	background: var(--s4-slate-100);
+	color: var(--s4-slate-600);
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.send4wc-avatar--ok {
+	background: var(--s4-emerald-100);
+	color: var(--s4-emerald-700);
+}
+
+.send4wc-avatar--info {
+	background: var(--s4-blue-50);
+	color: var(--s4-blue-700);
+}
+
+.send4wc-avatar--warn {
+	background: var(--s4-amber-50);
+	color: var(--s4-amber-800);
+}
+
+.send4wc-avatar--bad {
+	background: var(--s4-red-50);
+	color: var(--s4-red-700);
+}
+
+.send4wc-tile {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	flex-shrink: 0;
+	border-radius: var(--s4-radius-lg);
+	background: var(--s4-slate-100);
+	color: var(--s4-slate-600);
+}
+
+.send4wc-tile--on {
+	background: var(--s4-emerald-50);
+	color: var(--s4-emerald-700);
+}
+
+.send4wc-tile--idle {
+	background: var(--s4-blue-50);
+	color: var(--s4-blue-700);
+}
+
+.send4wc-tile--absent {
+	background: var(--s4-slate-100);
+	color: var(--s4-slate-400);
+}
+
+/* ----------------------------------------------------------- badges/pills */
+
+.send4wc-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 2px 8px;
+	border: 1px solid transparent;
+	border-radius: 999px;
+	font-size: 11px;
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.send4wc-badge--ok {
+	background: var(--s4-emerald-50);
+	border-color: var(--s4-emerald-200);
+	color: var(--s4-emerald-700);
+}
+
+.send4wc-badge--info {
+	background: var(--s4-blue-50);
+	border-color: var(--s4-blue-200);
+	color: var(--s4-blue-700);
+}
+
+.send4wc-badge--warn {
+	background: var(--s4-amber-50);
+	border-color: var(--s4-amber-200);
+	color: var(--s4-amber-800);
+}
+
+.send4wc-badge--bad {
+	background: var(--s4-red-50);
+	border-color: var(--s4-red-200);
+	color: var(--s4-red-700);
+}
+
+.send4wc-badge--neutral {
+	background: var(--s4-slate-100);
+	border-color: var(--s4-slate-200);
+	color: var(--s4-slate-600);
+}
+
+.send4wc-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 4px 10px;
+	border: 1px solid transparent;
+	border-radius: 999px;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.send4wc-pill--ok {
+	background: var(--s4-emerald-50);
+	border-color: var(--s4-emerald-200);
+	color: var(--s4-emerald-700);
+}
+
+.send4wc-pill--warn {
+	background: var(--s4-amber-50);
+	border-color: var(--s4-amber-200);
+	color: var(--s4-amber-800);
+}
+
+.send4wc-pill--bad {
+	background: var(--s4-red-50);
+	border-color: var(--s4-red-200);
+	color: var(--s4-red-700);
+}
+
+.send4wc-pill--neutral {
+	background: var(--s4-slate-100);
+	border-color: var(--s4-slate-200);
+	color: var(--s4-slate-600);
+}
+
+.send4wc-dot {
+	display: inline-block;
+	width: 7px;
+	height: 7px;
+	border-radius: 999px;
+	background: currentColor;
+	flex-shrink: 0;
+}
+
+.send4wc-dot--ok {
+	background: var(--s4-emerald-600);
+}
+
+.send4wc-dot--bad {
+	background: var(--s4-red-600);
+}
+
+.send4wc-dot--warn {
+	background: var(--s4-amber-500);
+}
+
+/* ---------------------------------------------------------------- buttons */
+
+.send4wc-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	padding: 8px 14px;
+	border: 1px solid var(--s4-slate-200);
+	border-radius: var(--s4-radius-md);
+	background: #fff;
+	box-shadow: var(--s4-shadow-sm);
+	color: var(--s4-slate-700);
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1.2;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.send4wc-btn:hover,
+.send4wc-btn:focus {
+	background: var(--s4-slate-50);
+	color: var(--s4-slate-900);
+	border-color: var(--s4-slate-300);
+}
+
+.send4wc-btn--primary {
+	background: var(--s4-emerald-600);
+	border-color: var(--s4-emerald-600);
+	color: #fff;
+}
+
+.send4wc-btn--primary:hover,
+.send4wc-btn--primary:focus {
+	background: var(--s4-emerald-700);
+	border-color: var(--s4-emerald-700);
+	color: #fff;
+}
+
+.send4wc-btn--ghost {
+	box-shadow: none;
+	font-size: 12px;
+	padding: 6px 10px;
+}
+
+.send4wc-btn--sm {
+	padding: 5px 10px;
+	font-size: 12px;
+}
+
+.send4wc-btn--block {
+	width: 100%;
+}
+
+.send4wc-btn--dashed {
+	width: 100%;
+	background: transparent;
+	border-style: dashed;
+	border-color: var(--s4-slate-300);
+	box-shadow: none;
+	color: var(--s4-slate-600);
+}
+
+.send4wc-linkbtn {
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--s4-slate-500);
+	font-size: 13px;
+	font-weight: 500;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.send4wc-linkbtn:hover,
+.send4wc-linkbtn:focus {
+	color: var(--s4-slate-900);
+}
+
+.send4wc-linkbtn--danger:hover,
+.send4wc-linkbtn--danger:focus {
+	color: var(--s4-red-600);
+}
+
+.send4wc-app :focus-visible {
+	outline: 2px solid var(--s4-emerald-600);
+	outline-offset: 2px;
+}
+
+.send4wc-actions {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+	margin-top: 16px;
+}
+
+.send4wc-actions--end {
+	justify-content: flex-end;
+}
+
+.send4wc-inline-form {
+	display: inline-block;
+	margin: 0;
+}
+
+/* ------------------------------------------------------- segmented control */
+
+.send4wc-segmented {
+	display: inline-flex;
+	gap: 4px;
+	padding: 4px;
+	border-radius: var(--s4-radius-lg);
+	background: var(--s4-slate-100);
+}
+
+.send4wc-segmented__item {
+	padding: 5px 12px;
+	border-radius: var(--s4-radius-md);
+	color: var(--s4-slate-600);
+	font-size: 13px;
+	font-weight: 500;
+	text-decoration: none;
+}
+
+.send4wc-segmented__item:hover,
+.send4wc-segmented__item:focus {
+	color: var(--s4-slate-900);
+}
+
+.send4wc-segmented__item.is-active {
+	background: #fff;
+	box-shadow: var(--s4-shadow-sm);
+	color: var(--s4-slate-900);
+}
+
+/* ------------------------------------------------------------------ steps */
+
+.send4wc-step {
+	display: flex;
+	gap: 16px;
+}
+
+.send4wc-step__rail {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+.send4wc-step__num {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 999px;
+	background: var(--s4-slate-200);
+	color: var(--s4-slate-500);
+	font-size: 13px;
+	font-weight: 700;
+}
+
+.send4wc-step__num.is-active,
+.send4wc-step__num.is-done {
+	background: var(--s4-emerald-600);
+	color: #fff;
+}
+
+.send4wc-step__line {
+	flex: 1;
+	width: 2px;
+	margin: 8px 0;
+	background: var(--s4-slate-200);
+}
+
+.send4wc-step__body {
+	flex: 1;
+	min-width: 0;
+	padding-bottom: 28px;
+}
+
+.send4wc-step--last .send4wc-step__body {
+	padding-bottom: 0;
+}
+
+.send4wc-step__form {
+	margin-top: 16px;
+}
+
+.send4wc-locked {
+	margin-top: 12px;
+	padding: 12px 14px;
+	border: 1px solid var(--s4-slate-200);
+	border-radius: var(--s4-radius-md);
+	background: var(--s4-slate-50);
+	font-size: 13px;
+}
+
+.send4wc-manual {
+	margin-top: 20px;
+	padding-top: 16px;
+	border-top: 1px solid var(--s4-slate-200);
+}
+
+.send4wc-manual summary {
+	color: var(--s4-slate-600);
+	font-size: 13px;
+	font-weight: 500;
+	cursor: pointer;
+}
+
+.send4wc-manual summary:hover {
+	color: var(--s4-slate-900);
+}
+
+.send4wc-manual > *:not(summary) {
+	margin-top: 12px;
+}
+
+/* ------------------------------------------------------------------ forms */
+
+.send4wc-field {
+	margin-bottom: 16px;
+}
+
+.send4wc-field > label {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 6px;
+	font-size: 13px;
+	font-weight: 500;
+	color: var(--s4-slate-700);
+}
+
+.send4wc-field p {
+	margin: 6px 0 0;
+}
+
+.send4wc-input {
+	width: 100%;
+	max-width: 100%;
+	min-height: 40px;
+	padding: 8px 10px;
+	border: 1px solid var(--s4-slate-300);
+	border-radius: var(--s4-radius-md);
+	background: #fff;
+	box-shadow: var(--s4-shadow-sm);
+	font-size: 13px;
+	color: var(--s4-slate-900);
+}
+
+.send4wc-input:focus {
+	border-color: var(--s4-emerald-600);
+	box-shadow: 0 0 0 1px var(--s4-emerald-600);
+	/* Transparent rather than none: forced-colors mode drops the box-shadow
+	   and paints outlines in a system colour, so this is what keeps a focus
+	   ring there. */
+	outline: 2px solid transparent;
+}
+
+.send4wc-check {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 13px;
+	color: var(--s4-slate-700);
+}
+
+.send4wc-field > label.send4wc-check--top {
+	align-items: flex-start;
+	margin-bottom: 0;
+}
+
+.send4wc-check--top + p {
+	padding-left: 24px;
+}
+
+/* ----------------------------------------------------------------- tables */
+
+.send4wc-table-wrap {
+	overflow-x: auto;
+}
+
+.send4wc-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 13px;
+}
+
+.send4wc-table th {
+	padding: 10px 12px;
+	border-bottom: 1px solid var(--s4-slate-200);
+	color: var(--s4-slate-500);
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: .04em;
+	text-transform: uppercase;
+	text-align: left;
+}
+
+.send4wc-table td {
+	padding: 12px;
+	border-top: 1px solid var(--s4-slate-100);
+	vertical-align: top;
+}
+
+.send4wc-table td p {
+	margin: 4px 0 0;
+}
+
+.send4wc-table--rows th:first-child,
+.send4wc-table--rows td:first-child {
+	padding-left: 20px;
+}
+
+.send4wc-table--rows th:last-child,
+.send4wc-table--rows td:last-child {
+	padding-right: 20px;
+}
+
+.send4wc-table__actions {
+	white-space: nowrap;
+	text-align: right;
+}
+
+.send4wc-table__actions .send4wc-inline-form {
+	margin-left: 10px;
+}
+
+.send4wc-table th.send4wc-table__num,
+.send4wc-table td.send4wc-table__num {
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+}
+
+.send4wc-table__num--warn {
+	color: var(--s4-amber-800);
+	font-weight: 600;
+}
+
+.send4wc-table__num--bad {
+	color: var(--s4-red-700);
+	font-weight: 600;
+}
+
+/* --------------------------------------------------------------- outcomes */
+
+.send4wc-outcomes,
+.send4wc-formstats {
+	margin-bottom: 16px;
+}
+
+.send4wc-outcomes__body {
+	display: flex;
+	align-items: center;
+	gap: 28px;
+	padding: 20px;
+}
+
+.send4wc-outcomes__rate {
+	flex-shrink: 0;
+	min-width: 96px;
+}
+
+.send4wc-outcomes__rate p {
+	margin: 0;
+}
+
+.send4wc-outcomes__main {
+	flex: 1;
+	min-width: 0;
+}
+
+.send4wc-outcomes__foot p {
+	margin: 0;
+	color: var(--s4-slate-600);
+}
+
+.send4wc-outcomes__foot p + p {
+	margin-top: 8px;
+}
+
+/* One segment per outcome, sized by flex-grow so the widths need no maths. */
+.send4wc-bar {
+	display: flex;
+	gap: 2px;
+	height: 10px;
+	border-radius: 999px;
+	overflow: hidden;
+	background: var(--s4-slate-100);
+}
+
+.send4wc-bar__seg {
+	flex-basis: 0;
+	min-width: 4px;
+}
+
+.send4wc-bar__seg--ok {
+	background: var(--s4-emerald-600);
+}
+
+.send4wc-bar__seg--info {
+	background: var(--s4-blue-700);
+}
+
+.send4wc-bar__seg--warn {
+	background: var(--s4-amber-500);
+}
+
+.send4wc-bar__seg--bad {
+	background: var(--s4-red-600);
+}
+
+.send4wc-legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px 20px;
+	margin: 12px 0 0;
+	padding: 0;
+	list-style: none;
+	font-size: 12px;
+}
+
+.send4wc-legend__item {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin: 0;
+}
+
+.send4wc-legend__swatch {
+	width: 8px;
+	height: 8px;
+	border-radius: 2px;
+	flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+	.send4wc-outcomes__body {
+		display: block;
+	}
+
+	.send4wc-outcomes__rate {
+		margin-bottom: 16px;
+	}
+}
+
+/* ----------------------------------------------------------------- notices */
+
+.send4wc-notice {
+	margin: 0 0 16px;
+	padding: 12px 16px;
+	border: 1px solid var(--s4-slate-200);
+	border-left-width: 4px;
+	border-radius: var(--s4-radius-lg);
+	background: #fff;
+	box-shadow: var(--s4-shadow-sm);
+	font-size: 13px;
+}
+
+.send4wc-notice p {
+	margin: 0;
+}
+
+.send4wc-notice p + p {
+	margin-top: 4px;
+}
+
+.send4wc-notice--success {
+	border-left-color: var(--s4-emerald-600);
+}
+
+.send4wc-notice--warn {
+	border-left-color: var(--s4-amber-500);
+}
+
+.send4wc-notice--error {
+	border-left-color: var(--s4-red-600);
+}
+
+.send4wc-notice--inline {
+	margin: 12px 0 0;
+}
+
+/* ---------------------------------------------------------------- readiness */
+
+/* "Before Send4 can text your leads" (#1531): above everything else on the
+   dashboard, because until it is empty no lead is texted. */
+.send4wc-readiness {
+	margin-bottom: 20px;
+	border-left: 4px solid var(--s4-amber-500);
+}
+
+.send4wc-readiness__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.send4wc-readiness__list .send4wc-list__row,
+.send4wc-readiness__list .send4wc-list__main {
+	margin: 0;
+}
+
+.send4wc-readiness__list .send4wc-btn {
+	flex-shrink: 0;
+}
+
+/* -------------------------------------------------------------- odds & ends */
+
+.send4wc-eyebrow {
+	margin: 0 0 12px;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: .06em;
+	text-transform: uppercase;
+	color: var(--s4-slate-400);
+}
+
+.send4wc-ticks {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.send4wc-ticks li {
+	position: relative;
+	margin: 0 0 12px;
+	padding-left: 26px;
+	font-size: 13px;
+	color: var(--s4-slate-700);
+}
+
+.send4wc-ticks li:last-child {
+	margin-bottom: 0;
+}
+
+.send4wc-ticks li::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 2px;
+	width: 18px;
+	height: 18px;
+	border-radius: 999px;
+	background: var(--s4-emerald-100) url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23047857' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m20 6-11 11-5-5'/%3E%3C/svg%3E") center / 11px 11px no-repeat;
+}
+
+.send4wc-promo {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.send4wc-promo p {
+	margin: 0 0 2px;
+}
+
+.send4wc-adapters ul {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px 20px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.send4wc-adapters li {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+	font-size: 13px;
+}
+
+.send4wc-passthrough {
+	margin: 12px 0 0;
+	padding: 0;
+	list-style: none;
+	max-height: 320px;
+	overflow-y: auto;
+}
+
+.send4wc-passthrough li {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	padding: 7px 0;
+	border-top: 1px solid var(--s4-slate-100);
+	font-size: 13px;
+	min-width: 0;
+}
+
+.send4wc-passthrough li:first-child {
+	border-top: 0;
+}
+
+.send4wc-passthrough code {
+	flex-shrink: 0;
+}

@@ -1,0 +1,36 @@
+# szepeviktor/phpstan-wordpress is wired in by phpstan/extension-installer, so
+# it needs no include line here: it brings the WordPress function and class
+# stubs and teaches PHPStan about WP_Error return shapes.
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    level: 5
+
+    paths:
+        - send4-for-woocommerce.php
+        - uninstall.php
+        - includes
+        - admin
+
+    # The constants send4-for-woocommerce.php defines at load time.
+    bootstrapFiles:
+        - tests/stubs/constants.php
+
+    # WooCommerce is checked against php-stubs/woocommerce-stubs rather than the
+    # plugin itself: indexing all of WooCommerce costs more memory than CI's PHP
+    # has. WP-CLI is the environment the commands run inside rather than a
+    # dependency, so it is analysed against hand-written stubs. scanFiles rather
+    # than paths: these are declarations to read, not code to check.
+    scanFiles:
+        - vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
+        - tests/stubs/wp-cli.php
+        - tests/stubs/wp-cli-utils.php
+
+    # Set per site, in wp-config.php or by the hosting container. Without this
+    # PHPStan folds the constant to the empty-string default the main file declares
+    # and reports every "has it been overridden?" check as dead code.
+    dynamicConstantNames:
+        - SEND4WC_API_BASE_URL
+        # The store's own WooCommerce version; the stubs pin it to '0.0.0'.
+        - WC_VERSION
