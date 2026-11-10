@@ -1,0 +1,9 @@
+/vendor/
+/node_modules/
+/build/
+/tests/wordpress/
+/tests/plugins/
+/.phpunit.result.cache
+/.phpcs.cache
+.env
+.DS_Store
