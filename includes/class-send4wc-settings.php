@@ -163,7 +163,7 @@ class Send4WC_Settings {
 	 * store's orders, not with the administrator's browser. So the destination
 	 * is checked the way the API destination is, rather than taken on faith.
 	 *
-	 * Broader than base_url_is_allowed() on purpose. A development Laravel app
+	 * Broader than base_url_is_allowed() on purpose. A development Send4 app
 	 * is reached by the container over plain HTTP, but sends the browser to its
 	 * own https://*.local address, and that has to keep working. Userinfo is
 	 * refused outright: "https://app.send4.ai@evil.com" parses one way in PHP

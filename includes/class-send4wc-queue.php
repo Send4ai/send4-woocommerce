@@ -71,8 +71,8 @@ class Send4WC_Queue {
 		// TEXT columns may not carry a DEFAULT at all, and the epoch sentinel is
 		// used instead of the zero date because NO_ZERO_DATE rejects the latter.
 		//
-		// client_id is the Send4 API client the row was queued under. Send4's
-		// receipt is per client, so a row sent under a different client would
+		// client_id is the Send4 API client the row was queued under. Send4
+		// dedupes per client, so a row sent under a different client would
 		// be an order in somebody else's workspace. The same goes for
 		// uniqueness: one row per event *per client*.
 		$sql = "CREATE TABLE {$table} (

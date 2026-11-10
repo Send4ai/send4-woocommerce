@@ -10,7 +10,7 @@
  * invisible in the response:
  *
  * - redirection => 0, because following a redirect hands the bearer token to
- *   whoever the redirect names, and an unauthenticated Laravel route answers
+ *   whoever the redirect names, and an unauthenticated route answers
  *   302 to /login — which, followed, looks like a perfectly good 200 with an
  *   HTML body;
  * - sslverify => true, because the request carries a credential and a buyer's

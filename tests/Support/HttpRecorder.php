@@ -216,7 +216,7 @@ class Send4WC_Http_Recorder {
 	}
 
 	/**
-	 * Queue the 409 a hand-made API key gets: no installation to key a receipt on.
+	 * Queue the 409 a hand-made API key gets: Send4 cannot tell which store it is.
 	 *
 	 * @return void
 	 */
@@ -227,7 +227,7 @@ class Send4WC_Http_Recorder {
 	/**
 	 * Queue a rejected envelope.
 	 *
-	 * @param array $errors Laravel-style validation error bag.
+	 * @param array $errors Validation error bag, field => messages.
 	 * @return void
 	 */
 	public function queue422( array $errors = array( 'event.topic' => array( 'The event.topic field is required.' ) ) ) {
@@ -245,7 +245,7 @@ class Send4WC_Http_Recorder {
 	/**
 	 * Queue a redirect.
 	 *
-	 * An unauthenticated Laravel route answers 302 to /login, so this is what a
+	 * An unauthenticated route answers 302 to /login, so this is what a
 	 * wrong base URL, a stale token or a firewall in the way actually looks
 	 * like. The plugin sends with redirection => 0 precisely so that it sees
 	 * the 302 rather than a 200 carrying somebody's login page.

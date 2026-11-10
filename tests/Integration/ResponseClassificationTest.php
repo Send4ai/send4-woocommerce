@@ -245,8 +245,8 @@ class Send4WC_Response_Classification_Test extends Send4WC_Test_Case {
 	}
 
 	/**
-	 * A key made by hand, rather than by connecting this store, has no
-	 * installation to key the order's receipt on. Every event would get the
+	 * A key made by hand, rather than by connecting this store, does not tell
+	 * Send4 which store an order belongs to. Every event would get the
 	 * same 409, so it is parked at once with the fix in the words.
 	 *
 	 * @return void

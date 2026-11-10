@@ -167,7 +167,7 @@ class Send4WC_Store_Events_Test extends Send4WC_Test_Case {
 
 	/**
 	 * An order that comes back to the same status before the first event is
-	 * sent is still one event, as it is one receipt in Send4.
+	 * sent is still one event, as it is one in Send4.
 	 *
 	 * @return void
 	 */

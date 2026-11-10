@@ -198,7 +198,7 @@ class Send4WC_Installer_Test extends Send4WC_Test_Case {
 	}
 
 	/**
-	 * The columns the queue writes. Send4's receipt is per API client, so a
+	 * The columns the queue writes. Send4 dedupes per API client, so a
 	 * row says which client it was queued under; sent under another it would
 	 * be an order in somebody else's workspace.
 	 *

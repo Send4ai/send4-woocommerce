@@ -70,8 +70,8 @@ class Send4WC_Order_Payload {
 		return array(
 			'event' => array(
 				// The same order reaching the same status again is the same
-				// event: Send4 keys its receipt on order and topic, and so does
-				// the queue. Send4 prefixes the store's installation itself.
+				// event: Send4 keeps one per order and topic, and so does the
+				// queue.
 				'id'          => 'woo:' . $order->get_id() . ':' . $topic,
 				'topic'       => (string) $topic,
 				'occurred_at' => gmdate( 'c' ),

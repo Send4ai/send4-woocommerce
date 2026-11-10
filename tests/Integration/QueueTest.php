@@ -124,8 +124,8 @@ class Send4WC_Queue_Test extends Send4WC_Test_Case {
 	}
 
 	/**
-	 * A retry must be the same event, not a second one: Send4 keys its receipt
-	 * on the event id, and so does the queue.
+	 * A retry must be the same event, not a second one: Send4 keeps one per
+	 * order and status, and so does the queue.
 	 *
 	 * @return void
 	 */

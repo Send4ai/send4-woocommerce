@@ -686,7 +686,7 @@ class Send4WC_Api_Client {
 		}
 
 		// 409: the credential was minted by hand rather than by connecting this
-		// site, so Send4 has no installation row to record the store against.
+		// store, so Send4 cannot tell which store it belongs to.
 		// Not retryable, and the fix is to reconnect.
 		if ( 409 === $code ) {
 			$body = $this->decode( $response );
@@ -778,8 +778,8 @@ class Send4WC_Api_Client {
 			return $result;
 		}
 
-		// The credential was minted by hand, so Send4 has no installation to key
-		// the order's receipt on. Every event would get the same answer.
+		// The credential was minted by hand, so Send4 cannot tell which store
+		// the order belongs to. Every event would get the same answer.
 		if ( 409 === $code ) {
 			$message = isset( $body['message'] ) && is_string( $body['message'] ) ? trim( $body['message'] ) : '';
 
@@ -866,7 +866,7 @@ class Send4WC_Api_Client {
 	}
 
 	/**
-	 * Flatten Laravel's validation error bag into one line.
+	 * Flatten the API's validation error bag into one line.
 	 *
 	 * @param array $body Decoded response body.
 	 * @return string
@@ -993,7 +993,7 @@ class Send4WC_Api_Client {
 			'sslverify'   => true,
 			// A redirect is never a legitimate answer from this API. Following
 			// one would mean handing the bearer token to whoever the redirect
-			// names, and an unauthenticated Laravel route answers 302 to /login,
+			// names, and an unauthenticated route answers 302 to /login,
 			// which would otherwise look like a successful 200 with an HTML body.
 			'redirection' => 0,
 			'headers'     => array_merge(

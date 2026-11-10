@@ -244,8 +244,8 @@ class Send4WC_Delivery_Test extends Send4WC_Test_Case {
 	}
 
 	/**
-	 * A hand-made API key has no installation for Send4 to key the order's
-	 * receipt on. Every event would get the same 409, so it is parked with
+	 * A hand-made API key does not tell Send4 which store an order belongs to.
+	 * Every event would get the same 409, so it is parked with
 	 * Send4's own words, which say to reconnect.
 	 *
 	 * @return void
