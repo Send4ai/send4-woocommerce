@@ -1,0 +1,18 @@
+# The build context is the plugin repo. Excluded here is what the PHPUnit image
+# does not need or what is not in git anyway.
+
+.git
+.github
+
+# Not tracked: build output and installed dependencies. The PHPUnit image gets its vendor/ from a bind mount at runtime.
+build
+node_modules
+vendor
+tests/wordpress
+tests/plugins
+.phpunit.result.cache
+.phpcs.cache
+
+# Local-only, and .env in particular holds real Send4 credentials.
+.env
+.DS_Store

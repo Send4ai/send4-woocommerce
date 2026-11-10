@@ -1,0 +1,4 @@
+== Changelog ==
+
+Older releases, newest first. The two latest are in readme.txt, as the WordPress.org plugin
+directory asks.

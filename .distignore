@@ -1,0 +1,41 @@
+# Paths are relative to the plugin root. A leading slash anchors a pattern
+# there; without one, rsync (and the wordpress.org deploy actions, which also
+# use rsync) match the name at ANY depth — which is how a library's own
+# README.md or a nested build/ directory would vanish from the zip unnoticed.
+/.git
+/.github
+/.claude
+/.wordpress-org
+/bin
+/build
+/dev
+/docs
+/tests
+/vendor
+/node_modules
+/.distignore
+/.dockerignore
+/.editorconfig
+/.env
+/.env.example
+/.gitignore
+/.phpcs.cache
+/.phpunit.result.cache
+/composer.json
+/composer.lock
+/docker-compose.yml
+/Dockerfile.tests
+/Makefile
+/phpcs.xml.dist
+/phpstan.neon.dist
+/phpstan-baseline.neon
+/phpunit.xml.dist
+/README.md
+
+# The zip is built from the working tree, not from git, so editor and OS
+# litter in a developer's checkout would otherwise ship. Plugin Check reports
+# hidden files as an error. Unanchored on purpose: these can appear anywhere.
+.DS_Store
+.idea
+.vscode
+*.swp

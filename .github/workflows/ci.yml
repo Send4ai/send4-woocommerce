@@ -1,0 +1,193 @@
+# ubuntu-24.04 is pinned rather than -latest so the PHP 7.4 leg survives the
+# eventual runner-image migration.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  # release.yml runs the whole of this before it makes a release.
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: PHPCS + PHPStan
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer:v2
+
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.cache/composer
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: PHPCS
+        run: vendor/bin/phpcs
+
+      - name: PHPStan
+        run: vendor/bin/phpstan analyse --no-progress
+
+      # The plugin must not fall back to curl or skip TLS verification. Both are
+      # wordpress.org review failures and the second is a real vulnerability, so
+      # they are checked as text rather than trusted to a sniff.
+      - name: No raw HTTP clients, no disabled TLS
+        run: |
+          set -euo pipefail
+          if grep -rnE "curl_init|file_get_contents\s*\(\s*['\"]https?:" --include='*.php' send4-for-woocommerce.php uninstall.php includes admin; then
+            echo "::error::Use the WordPress HTTP API, not curl or file_get_contents." && exit 1
+          fi
+          # Matched loosely on whitespace: the alignment either side of the =>
+          # moves whenever a neighbouring key in the args array grows, and a
+          # guard that fails for that reason is a guard people learn to ignore.
+          if grep -rn "sslverify" --include='*.php' send4-for-woocommerce.php uninstall.php includes admin | grep -vE "'sslverify'[[:space:]]*=>[[:space:]]*true" | grep -q .; then
+            echo "::error::sslverify must be left true." && exit 1
+          fi
+
+  phpunit:
+    name: PHPUnit (PHP ${{ matrix.php }}, ${{ matrix.multisite == '1' && 'multisite' || 'single site' }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      # A multisite leg as well as the two PHP legs, because the installer's
+      # network branch is the difference between one subsite having a queue
+      # table and every other store on the network silently losing order events.
+      # Only on 8.3: it is the same WordPress code either way, and the point is
+      # to run tests/Integration/MultisiteInstallTest.php at all.
+      matrix:
+        include:
+          - php: '7.4'
+            multisite: '0'
+          - php: '8.3'
+            multisite: '0'
+          - php: '8.3'
+            multisite: '1'
+    services:
+      db:
+        image: mariadb:11.8.8
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: wp_test
+        ports:
+          - 3306:3306
+        # --su-mysql has to come first, and the start period keeps the first few
+        # probes from failing while InnoDB initialises.
+        options: >-
+          --health-cmd="healthcheck.sh --su-mysql --connect --innodb_initialized"
+          --health-start-period=10s
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mysqli, mbstring, gd
+          coverage: none
+          tools: composer:v2
+
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.cache/composer
+          key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ hashFiles('composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-${{ matrix.php }}-
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: PHPUnit
+        env:
+          WP_TESTS_DB_HOST: 127.0.0.1
+          WP_TESTS_DB_NAME: wp_test
+          WP_TESTS_DB_USER: root
+          WP_TESTS_DB_PASSWORD: root
+          WP_TESTS_MULTISITE: ${{ matrix.multisite }}
+        run: vendor/bin/phpunit
+
+  zip:
+    name: Distributable zip
+    runs-on: ubuntu-24.04
+    needs: [lint, phpunit]
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Build
+        run: bin/build-zip.sh
+
+      # wordpress.org rejects a plugin that ships its build tooling, and a
+      # vendor directory in the zip would also mean shipping dev dependencies.
+      - name: Nothing developer-only made it in
+        run: |
+          set -euo pipefail
+          ZIP=build/send4-for-woocommerce.zip
+          for unwanted in 'send4-for-woocommerce/vendor/' 'send4-for-woocommerce/tests/' 'send4-for-woocommerce/composer.json' 'send4-for-woocommerce/dev/' 'send4-for-woocommerce/docker/' 'send4-for-woocommerce/phpstan' '.dist'; do
+            if unzip -l "$ZIP" | grep -q "$unwanted"; then
+              echo "::error::${unwanted} must not be in the distributable zip." && exit 1
+            fi
+          done
+          unzip -l "$ZIP" | grep -q 'send4-for-woocommerce/send4-for-woocommerce.php'
+          unzip -l "$ZIP" | grep -q 'send4-for-woocommerce/readme.txt'
+          # Plugin Check reports any hidden file as an error.
+          if unzip -Z1 "$ZIP" | grep -E '(^|/)\.[^/]+/?$'; then
+            echo "::error::Hidden files must not be in the distributable zip." && exit 1
+          fi
+          # And any name with a space or a special character.
+          if unzip -Z1 "$ZIP" | grep -E '[^A-Za-z0-9._/-]'; then
+            echo "::error::File names in the zip may only use letters, digits, '.', '_', '-' and '/'." && exit 1
+          fi
+
+      # Send4WC_Assets::url() serves this in preference to the plain name, so
+      # that a CDN ignoring `?ver=` still fetches a new release.
+      - name: Our own assets carry the version in their file names
+        run: |
+          set -euo pipefail
+          VERSION="$(grep -m1 '^ \* Version:' send4-for-woocommerce.php | awk '{print $3}')"
+          if ! unzip -l build/send4-for-woocommerce.zip | grep -qF "send4-for-woocommerce/admin/css/admin.${VERSION}.css"; then
+            echo "::error::admin.${VERSION}.css is missing from the distributable zip." && exit 1
+          fi
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: send4wc-plugin
+          path: build/send4-for-woocommerce.zip
+          retention-days: 14
+
+  # What WordPress.org runs on every upload, run on what we would upload: the
+  # built zip, never the repository, which holds tests, tooling and vendor/.
+  # Errors fail the job, as they block a submission; warnings are annotations
+  # to read before a release.
+  plugin-check:
+    name: Plugin Check
+    runs-on: ubuntu-24.04
+    needs: [zip]
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: send4wc-plugin
+          path: build
+
+      - name: Unpack the zip
+        run: unzip -q build/send4-for-woocommerce.zip -d build
+
+      - uses: WordPress/plugin-check-action@10857da14b6c2246d15402b3e69f777edcf8c12e # v1.1.9
+        with:
+          build-dir: build/send4-for-woocommerce

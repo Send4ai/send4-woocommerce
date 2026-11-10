@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<phpunit
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+	bootstrap="tests/bootstrap.php"
+	colors="true"
+	beStrictAboutTestsThatDoNotTestAnything="true"
+	convertDeprecationsToExceptions="false"
+	failOnWarning="true"
+	failOnRisky="true"
+	>
+	<php>
+		<!-- wp-phpunit's own wp-tests-config.php requires whatever this points at. -->
+		<env name="WP_PHPUNIT__TESTS_CONFIG" value="tests/wp-config.php"/>
+	</php>
+	<testsuites>
+		<testsuite name="Unit">
+			<directory suffix="Test.php">tests/Unit</directory>
+		</testsuite>
+		<testsuite name="Integration">
+			<directory suffix="Test.php">tests/Integration</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>
